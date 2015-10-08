@@ -13,7 +13,19 @@
  * @return {Number} Произведение всех аргументов.
  */
 function multiply(a,b,c,d){
-
+	if (arguments.length<2)
+        throw new Error("Invalid arguments");
+    var i;
+    var n;
+    var res=1;
+    for (i=0; i<arguments.length; i++) {
+        n = arguments[i];
+        if (typeof n === "number")
+            res*=n;
+        else 
+            throw new Error("Invalid arguments");
+    }
+    return res;
 }
 /**
  * Задание 2. Создать функцию factorial для подсчета факториала. Функция в качестве параметра
@@ -29,7 +41,9 @@ function multiply(a,b,c,d){
  * @return {Number} факториал числа.
  */
 function factorial (n) {
-
+	if (n === 0)
+        return 1; 
+    return n*factorial(n-1);
 }
 /**
  * Задание 3. Создать функцию pow для возведения числа в степень. Функция в качестве параметра
@@ -47,7 +61,15 @@ function factorial (n) {
  * @return {Number} a^b.
  */
 function pow (a,b) {
-
+	var i;
+    var res=1;
+    if (b>=0)
+        for (i=0; i<b; i++)
+            res*=a;
+    else 
+        for (i=0; i>b; i--)
+            res/=a;
+    return res;
 }
 /**
  * Задание 3. Создать функцию repeat.
@@ -68,7 +90,15 @@ function pow (a,b) {
  * @return {String} Строка с повотрениями.
  */
 function repeat(str, count, sep){
-
+	var i;
+    var res="";
+    var hasSep = typeof sep !== "undefined"; 
+    for (i=0; i<count; i++) {
+        res+=str;
+        if (hasSep && i !== count-1)
+            res+=sep;
+    }
+    return res;
 }
 /**
  * Задание 4. Создать функцию compare. Сравнивающую два объекта. Валидация парамметров.
@@ -89,8 +119,30 @@ function repeat(str, count, sep){
  *
  * @return {Boolean} результат сравнения.
  */
-function compare(a, b){
+ //Функция, которая используется в следующих двух функциях. 
+ function getSize(obj) {
+    var el;
+    var res = 0; 
+    for (el in obj)
+        if (obj.hasOwnProperty(el))
+        res++;
+    return res;
+}
 
+function compare(a, b){
+	if (typeof a !== "object" || typeof b !== "object")
+        throw new Error("Invalid arguments");
+    if (getSize(a) !== getSize(b))
+        return false;
+    for (var el in a) {
+        var f = a[el];
+        var s = b[el];
+        if (typeof f === "object" && typeof s === "object")
+            return compare(f, s); 
+        else if (f !== s)
+            return false;
+    }
+    return true; 
 }
 /**
  * Задание 5. Создать функцию-фабрику телефонных книг phoneList, создающую телефоный лист.
@@ -118,5 +170,24 @@ function compare(a, b){
  *
  */
 function phoneList(name){
-
+	var list = { } 
+    var res = function (name, num) {
+        list[name] = num; 
+    }
+    res.listName = name;                   
+    res.getAll = function() {
+        return list; 
+    }
+    res.getForName = function(name) {
+        return list[name];
+    }
+    res.getForNum = function(num) {
+        for (var el in list)
+            if (list[el]===num)
+                return el;
+    }
+    res.getLength = function() {
+        return getSize(list);
+    }
+    return res;
 }
