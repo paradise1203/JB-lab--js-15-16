@@ -1,3 +1,29 @@
+//'util' functions.
+
+function checkType(type, vars) {
+    var i;
+    for (i in vars) {
+        if (typeof vars[i] !== type)
+            return false;
+    }
+    return true;
+}
+
+function notNuN() {
+    var i;
+    var el;
+    for (i in arguments) {
+        el = arguments[i];
+        if (el !== el)
+            return false;
+    }
+    return true;
+}
+
+function throwError() {
+    throw new Error("Invalid arguments");
+}
+
 /**
  * ������� 1. ������� ������� multiply, ������������� ���������,
  * ���������� � �������� ����������. ���� ���������� ��������� �� ��������
@@ -12,19 +38,19 @@
  * ����� ��� ������������. ���������� ������� ����� ������������*
  * @return {Number} ������������ ���� ����������.
  */
-function multiply(a,b,c,d){
+function multiply(a,b,c,d) {
     console.log(arguments);
-	if (arguments.length<2)
-        throw new Error("Invalid arguments");
+    if (arguments.length < 2)
+        throwError();
     var i;
     var n;
-    var res=1;
-    for (i=0; i<arguments.length; i++) {
+    var res = 1;
+    for (i = 0; i < arguments.length; i++) {
         n = arguments[i];
-        if (typeof n === "number" && n===n)
-            res*=n;
-        else 
-            throw new Error("Invalid arguments");
+        if (checkType("number", [n]) && notNuN(n))
+            res *= n;
+        else
+            throwError();
     }
     return res;
 }
@@ -43,11 +69,11 @@ function multiply(a,b,c,d){
  */
 function factorial (n) {
     console.log(arguments);
-    if (n!==n || typeof n !== "number" || n<0)
-        throw new Error("Invalid argument");
-	if (n === 0)
-        return 1; 
-    return n*factorial(n-1);
+    if (!checkType("number", [n]) || !notNuN(n) || n < 0)
+        throwError();
+    if (n === 0)
+        return 1;
+    return n * factorial(n - 1);
 }
 /**
  * ������� 3. ������� ������� pow ��� ���������� ����� � �������. ������� � �������� ���������
@@ -66,16 +92,16 @@ function factorial (n) {
  */
 function pow (a,b) {
     console.log(arguments);
-    if (typeof a!=="number" || typeof b!=="number" || a!==a || b!==b)
-        throw new Error("Invalid arguments");
-	var i;
-    var res=1;
-    if (b>=0)
-        for (i=0; i<b; i++)
-            res*=a;
-    else 
-        for (i=0; i>b; i--)
-            res/=a;
+    if (!checkType("number", [a, b]) || !notNuN(a, b))
+        throwError();
+    var i;
+    var res = 1;
+    if (b >= 0)
+        for (i = 0; i < b; i++)
+            res *= a;
+    else
+        for (i = 0; i > b; i--)
+            res /= a;
     return res;
 }
 /**
@@ -96,17 +122,17 @@ function pow (a,b) {
  *
  * @return {String} ������ � ������������.
  */
-function repeat(str, count, sep){
+function repeat(str, count, sep) {
     console.log(arguments);
-    if (typeof count !== "number" || count!==count || str!==str || sep!==sep)
-        throw new Error("Invalid arguments");
-	var i;
-    var res="";
-    var hasSep = typeof sep !== "undefined"; 
-    for (i=0; i<count; i++) {
-        res+=str;
-        if (hasSep && i !== count-1)
-            res+=sep;
+    if (!checkType("number", [count]) || !notNuN(str, count, sep))
+        throwError();
+    var i;
+    var res = "";
+    var hasSep = typeof sep !== "undefined";
+    for (i = 0; i < count; i++) {
+        res += str;
+        if (hasSep && i !== count - 1)
+            res += sep;
     }
     return res;
 }
@@ -130,30 +156,31 @@ function repeat(str, count, sep){
  * @return {Boolean} ��������� ���������.
  */
  //�������, ������� ������������ � ��������� ���� ��������. 
- function getSize(obj) {
+function getSize(obj) {
     var el;
-    var res = 0; 
+    var res = 0;
     for (el in obj)
         if (obj.hasOwnProperty(el))
-        res++;
+            res++;
     return res;
 }
 
-function compare(a, b){
+function compare(a, b) {
     console.log(arguments);
-	if (typeof a !== "object" || typeof b !== "object")
-        throw new Error("Invalid arguments");
+    if (!checkType("object", [a, b]))
+        throwError();
     if (getSize(a) !== getSize(b))
         return false;
-    for (var el in a) {
+    var el;
+    for (el in a) {
         var f = a[el];
         var s = b[el];
-        if (typeof f === "object" && typeof s === "object")
-            return compare(f, s); 
+        if (checkType("object", [f, s]))
+            return compare(f, s);
         else if (f !== s)
             return false;
     }
-    return true; 
+    return true;
 }
 /**
  * ������� 5. ������� �������-������� ���������� ���� phoneList, ��������� ��������� ����.
@@ -180,24 +207,24 @@ function compare(a, b){
  * myList.getAll() // {'me':123,'you':321}
  *
  */
-function phoneList(name){
-	var list = { } 
+function phoneList(name) {
+    var list = {}
     var res = function (name, num) {
         list[name] = num;
     }
     res._name = name;
-    res.getAll = function() {
-        return list; 
+    res.getAll = function () {
+        return list;
     }
-    res.getForName = function(name) {
+    res.getForName = function (name) {
         return list[name];
     }
-    res.getForNum = function(num) {
+    res.getForNum = function (num) {
         for (var el in list)
-            if (list[el]===num)
+            if (list[el] === num)
                 return el;
     }
-    res.getLength = function() {
+    res.getLength = function () {
         return getSize(list);
     }
     return res;
