@@ -70,4 +70,3 @@ Object.prototype._assign = function () {
         }
     }
 };
-
