@@ -8,21 +8,34 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('#result').innerText = 'Wrong';
         }
     }
-    function hhp(selector) {
-        var res=document.querySelectorAll(selector);
-        res.html = function () {
-            if (arguments.length == 0) {
-                return res[0].html();
-            } else {
-                for (var i in res) {
-                    res[i].html(selector);
-                }
-            }
-        }
-    }
     //hhp.html, hhp.text
     document.querySelector('.button').addEventListener('click', click)
 });
+
+function hhp(selector) {
+    var res = document.querySelectorAll(selector);
+    res.html = function (html) {
+        var i;
+        if (arguments.length == 0) {
+            return res[0].innerHTML;
+        } else {
+            for (i in res) {
+                res[i].innerHTML = html;
+            }
+        }
+    };
+    res.text = function (text) {
+        var i;
+        if (arguments.length == 0) {
+            return res[0].innerText;
+        } else {
+            for (i in res) {
+                res[i].innerText = text;
+            }
+        }
+    };
+    return res;
+}
 
 /*
 var str, regex;
