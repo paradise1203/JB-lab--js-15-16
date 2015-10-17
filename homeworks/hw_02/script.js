@@ -76,50 +76,26 @@ function formatUrl(url, obj) {
  * @return {Object} �������������� obj.
  */
 function objectFromUrl(url) {
-    if (typeof url != "string" && !checkUrl(url)) {
+    if (typeof url != "string") {
         throw new Error("Invalid argument");
     }
-    var i = 0, c, state = 0, temp = "", regex, res;
-    //ннаверное, плохая идея, но больше ничего не придумал) не закончил, решил скинуть пока, что есть.
-    while (i < url.length) {
-        c = url.charAt(i);
-        switch (state) {
-            case 0:
-            {
-                if (c == ":") {
-                    state = 1;
-                } else {
-                    temp += c;
-                }
-            }
-                break;
-            case 1:
-            {
-                regex = /[0-9]/gim;
-                if (regex.test(c)) {
-                    res.host = temp;
-                    temp = c;
-                    state = 3;
-                } else {
-                    res.protocol = temp;
-                    temp = "";
-                    state = 2;
-                }
-            }
-                break;
-            case 2:
-            {
-                regex = /[a-zA-Z0-9_-]/gim;
-                if (regex.test(c)) {
-                    temp += c;
-                }
-            }
-        }
+    var res = {};
+    res.protocol = url.match(/[^:\/]+/i)[0];
+    url = url.replace(res.protocol, "");
+    res.host = url.match(/([^\/]+\.[^\/:]+)+/i)[0];
+    url = url.replace(res.host, "");
+    res.port = url.match(/\d+/i)[0];
+    url = url.replace(res.port, "");
+    res.pathname = url.match(/(\/[^\?\/:]+)+/i)[0];
+    url = url.replace(res.pathname, "");
+    res.hash = url.match(/#[a-z\d_-]+/i)[0];
+    res.originQuery = url.match(/\?[^#]+/i)[0];
+    res.query = {};
+    var params = url.match(/[^\?=&]+=[^&#]+/gi);
+    for (var i in params) {
+        var el = params[i];
+        var pair = el.match(/[^=]+/gi);
+        res.query[pair[0]] = pair[1];
     }
     return res;
-}
-
-function checkUrl(url) {
-    var regex = /^http|https:\/\/[a-zA-Z0-9_-]+(\.[a-z]+)+(\/[a-zA-Z0-9_-]+)*(\?([a-zA-Z0-9_-]+=[a-zA-Z0-9_-]+)+)?/gim;
-    return regex.test(url);
 }
