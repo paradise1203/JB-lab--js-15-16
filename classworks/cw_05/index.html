@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../libs/jQuery/jquery-1.11.3.js"></script>
+    <script src="../../libs/doT/doT.js"></script>
+    <script src="script.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <ul id="dialog">
+
+    </ul>
+
+    <input type="text" id="message">
+    <select>
+        <option> red </option>
+        <option> black </option>
+        <option> white </option>
+    </select>
+    <button id="send"> Send </button>
+
+</body>
+<!--<script type="text/htmlh" id="temp1">
+    {{=it}} - {{=it.length}}
+    {{~it :value:key}}
+        {{=value}} - {{=key}}
+    {{~}}
+</script>-->
+<script type="text/x-doT-template" id="temp1">
+    {{=it.text}} - {{=it.date}}
+</script>
+</html>
