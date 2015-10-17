@@ -1,36 +1,59 @@
+function parseObj(obj) {
+    var i, res = "";
+    for (i in obj) {
+        if (res.length != 0) {
+            res += "&";
+        }
+        res += i + "=" + obj[i];
+    }
+    return res;
+}
 /**
- * Задание 1. Создать функцию toGetParams, формирующую из
- * объекта строку параметров для GET-запроса.
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ toGetParams, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ GET-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  *
  * @example
  * var params = toGetParams({p1: 1, p2: 'hello'}); // p1=1&p2=hello
  *
  * @param {Object} obj
- * Объект, из которого будут формироваться строка параметров.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  *
- * @return {String} строка параметров.
+ * @return {String} пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  */
-function toGetParams(obj){
+function toGetParams(obj) {
+    if (typeof obj != "object") {
+        throw new Error("Invalid argument");
+    }
+    return parseObj(obj);
 }
 /**
- * Задание 2. Создать функцию formatUrl, формирующую из базового url и объекта
- * строку GET-запроса.
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ formatUrl, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ url пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ * пїЅпїЅпїЅпїЅпїЅпїЅ GET-пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  *
  * @example
  * var getUrl = formatUrl('http://example.com', {a: 1, b: 2}); // 'http://example.com?a=1&b=2'
  *
  * @param {String} url
- * Базовый url
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ url
  *
  * @param {Object} obj
- * Объект, из которого будут формироваться строка параметров.
+ * пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
  *
- * @return {String} сформированный url.
+ * @return {String} пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ url.
  */
-function formatUrl(url, obj){
+function formatUrl(url, obj) {
+    if (typeof url != "string" || typeof obj != "object") {
+        throw new Error("Invalid arguments");
+    }
+    var res = parseObj(obj);
+    if (res != "") {
+        return url + "?" + res;
+    } else {
+        return url;
+    }
 }
 /**
- * Задание 3. Создать функцию objectFromUrl, формирующую из базового url
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ objectFromUrl, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ url
  *
  *
  * @example
@@ -48,9 +71,55 @@ function formatUrl(url, obj){
  *      }
  *
  * @param {String} url
- * Базовый url
+ * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ url
  *
- * @return {Object} сформированный obj.
+ * @return {Object} пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ obj.
  */
-function objectFromUrl(url){
+function objectFromUrl(url) {
+    if (typeof url != "string" && !checkUrl(url)) {
+        throw new Error("Invalid argument");
+    }
+    var i = 0, c, state = 0, temp = "", regex, res;
+    //РЅРЅР°РІРµСЂРЅРѕРµ, РїР»РѕС…Р°СЏ РёРґРµСЏ, РЅРѕ Р±РѕР»СЊС€Рµ РЅРёС‡РµРіРѕ РЅРµ РїСЂРёРґСѓРјР°Р») РЅРµ Р·Р°РєРѕРЅС‡РёР», СЂРµС€РёР» СЃРєРёРЅСѓС‚СЊ РїРѕРєР°, С‡С‚Рѕ РµСЃС‚СЊ.
+    while (i < url.length) {
+        c = url.charAt(i);
+        switch (state) {
+            case 0:
+            {
+                if (c == ":") {
+                    state = 1;
+                } else {
+                    temp += c;
+                }
+            }
+                break;
+            case 1:
+            {
+                regex = /[0-9]/gim;
+                if (regex.test(c)) {
+                    res.host = temp;
+                    temp = c;
+                    state = 3;
+                } else {
+                    res.protocol = temp;
+                    temp = "";
+                    state = 2;
+                }
+            }
+                break;
+            case 2:
+            {
+                regex = /[a-zA-Z0-9_-]/gim;
+                if (regex.test(c)) {
+                    temp += c;
+                }
+            }
+        }
+    }
+    return res;
+}
+
+function checkUrl(url) {
+    var regex = /^http|https:\/\/[a-zA-Z0-9_-]+(\.[a-z]+)+(\/[a-zA-Z0-9_-]+)*(\?([a-zA-Z0-9_-]+=[a-zA-Z0-9_-]+)+)?/gim;
+    return regex.test(url);
 }
