@@ -1,60 +1,56 @@
-function getEvent() {
-    var timeOut, time, timer, isStarted;
+function getEvent(){
+    var timeOut, timer, isStarted;
     isStarted = false;
-    function f() {
-        if (!isStarted) {
-            // onStrated
+    function f(){
+        if(!isStarted){
+            // onStarted
             isStarted = true;
         }
+        // onAction
         clearTimeout(timer);
-        timer = setTimeout(function () {
-            //do smth
+        timer = setTimeout(function(){
+            // save
             isStarted = false;
-        }, timeOut);
+        }, timeOut)
     }
 }
 
-function EventBus() {
+function EventBus(){
     var map = {};
     var self = this;
-    this.notify = function (eventName, data) {
-        var mas;
+    this.notify = function(eventName, data){
         if (map[eventName]) {
-            mas = map[eventName];
-        } else {
-            return;
+            map[eventName].forEach(function (element){
+                setTimeout(element.call(self,data),0);
+            })
         }
-        mas.forEach(function (e) {
-           setTimeout(e.call(self, data), 0);
-        });
-        return {}
+        return self;
     };
-    this.on = function (eventName, func) {
-        if (typeof func != "function") {
-            throw new Error("Invalid arguments!");
-        }
+    this.on = function(eventName, func){
         map[eventName] = map[eventName] || [];
         map[eventName].push(func);
+        return self;
     };
-    this.off = function (eventName, func) {
+    this.unSubscribe = function(eventName, func) {
+        var i;
         if (map[eventName]) {
-            var mas = map[eventName];
+            for (i=0;i<map[eventName].length;i++)
+                if(map[eventName][i] === func){
+                    map[eventName].splice(i, i+1);
+                    return self;
+                }
         }
-        for (var i in mas) {
-            if (mas[i] == func) {
-                mas.splice(i, i+1);
-            }
-        }
-    }
+        return self;
+    };
 }
-
 eventBus = new EventBus();
-var f = function (event) {
-    console.log(this);
-};
-eventBus.on('oO', function (event) {
+//eventBus.on('oO', function(event){
+//    console.log(event);
+//});
+eventBus.on('oO', function(event){
     console.log(this);
 });
-eventBus.on('oO', f);
-eventBus.off('oO', f);
-eventBus.notify('oO', {'k' : 'o'});
+//eventBus.notify('oO', {'k':'o'});
+notify = eventBus.notify;
+notify('oO', {'k':'o'});
+

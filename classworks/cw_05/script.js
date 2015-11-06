@@ -1,4 +1,4 @@
-$(function () {
+$(function(){
     var temp;
     temp = doT.template(
         $('#temp1').text()
