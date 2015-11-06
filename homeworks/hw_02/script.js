@@ -1,3 +1,7 @@
+function throwError() {
+    throw new Error("Invalid arguments");
+}
+
 function parseObj(obj) {
     var i, res = "";
     for (i in obj) {
@@ -22,7 +26,7 @@ function parseObj(obj) {
  */
 function toGetParams(obj) {
     if (typeof obj != "object") {
-        throw new Error("Invalid argument");
+        throwError();
     }
     return parseObj(obj);
 }
@@ -43,7 +47,7 @@ function toGetParams(obj) {
  */
 function formatUrl(url, obj) {
     if (typeof url != "string" || typeof obj != "object") {
-        throw new Error("Invalid arguments");
+        throwError();
     }
     var res = parseObj(obj);
     if (res != "") {

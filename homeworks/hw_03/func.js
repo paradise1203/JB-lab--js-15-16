@@ -1,3 +1,14 @@
+function checkArgs(args) {
+    if (args.length == 0) {
+        return false;
+    }
+    var type = typeof args[0];
+    if (type != 'object' && type != 'function') {
+        return false;
+    }
+    var props = args[1];
+    return !(props && typeof props != 'object');
+}
 /**
  * Object.create(proto[, propertiesObject])
  * Создаёт объект - наследник proto.
@@ -10,8 +21,21 @@
  *
  * Подробнее по методу можно посмотретьпо спецификации ES5
  */
-Object.create = function(proto){
-
+Object.prototype.create = function(proto) {
+    if (!checkArgs(arguments)) {
+        throw new Error('Invalid arguments!');
+    }
+    var f = function () {
+    };
+    f.prototype = proto;
+    var res = new f();
+    if (arguments.length > 1) {
+        var propertiesObject = arguments[1], el;
+        for (el in propertiesObject) {
+            res[el] = propertiesObject[el];
+        }
+    }
+    return res;
 };
 
 

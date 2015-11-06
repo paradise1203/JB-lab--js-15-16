@@ -6,8 +6,25 @@
  * isValidSelector('#id.class elem [attr="qwe"]') //true
  * isValidSelector('12 {} any string[attr=qwe=1]')//false
  */
-function isValidSelector(selector){
-
+function isValidSelector(selector) {
+    var regex;
+    selector = " " + selector;
+    /*
+     selector = selector + " ";
+     regex = / [#\.a-z\d\[\]"=_-]+ /gim;
+     var elms = selector.match(regex);
+     var regex1 = /(#|\.)[a-z\d_-]+/gim;
+     var regex2 = /[a-z\d_-]+/gim;
+     var regex3 = /\[[a-z]+="[a-z\d_-]*"\]/gim;
+     for (var i in elms) {
+     var el = elms[i];
+     if (!(regex1.test(el) || regex2.test(el) || regex3.test(el))) {
+     return false;
+     }
+     }
+     */
+    regex = /( (((#|\.)[a-z\d_-]+)|([a-z\d_-]+)|(\[[a-z]+="\[(a-z\d_-)*]"])))+/gim;
+    return true;
 }
 /**
  * -- test your might
@@ -20,7 +37,6 @@ function isValidSelector(selector){
  * minSelector('.class_1.class_2, .class_2.class_1') // ".class_1.class_2" || ".class_2.class_1"
 */
 function minSelector(selector){
-
 }
 /**
  * stringTempl - фукция шаблонизатор строк.
@@ -40,6 +56,15 @@ function minSelector(selector){
  *
  * @return {String} отформатированная строка.
  */
-function stringTempl(templ){
-
+function stringTempl(templ) {
+    var regex = /\{\{\d}}/gim;
+    var templs = templ.match(regex);
+    if (templs.length != arguments.length-1) {
+        throw new Error("Error: Invalid arguments count");
+    }
+    var i;
+    for (i = 0; i < templs.length; i++) {
+        templ = templ.replace(templs[i], arguments[i+1]);
+    }
+    return templ;
 }

@@ -33,6 +33,48 @@
  * При этом: onAnyRejected - получает только данные об ошибках, колличество аргументов константно (на месте, где вызвался resolve, аргумент == undefined)
  * для onAnyResolved соответсвенно наоборот.
  */
-Promise = function(funcWithAnAsync){
-
+Promise = function(funcWithAnAsync) {
+    var _this = this;
+    _this.s = 'pending';
+    _this.state = function () {
+        return _this.s;
+    };
+    _this.asyncFunc = funcWithAnAsync;
+    var resolve = function (data) {
+        if (arguments.length == 0) {
+            data = true;
+        }
+        _this.resolveData = data;
+        console.log(data);
+        _this.s = 'fulfilled';
+    };
+    var reject = function (data) {
+        if (arguments.length == 0) {
+            data = false;
+        }
+        _this.rejectData = data;
+        console.log(data);
+        _this.s = 'rejected';
+    };
+    _this.then = function (onResolved, onRejected) {
+        if (_this.s == 'pending') {
+            setTimeout(_this.then(onResolved, onRejected), 1000);
+        }
+        else if (onRejected && _this.s == 'rejected') {
+            onRejected(_this.rejectData);
+            return new Promise(_this.asyncFunc);
+        } else if (_this.s == 'fulfilled') {
+            onResolved(_this.resolveData);
+            return new Promise(_this.asyncFunc);
+        }
+    };
+    _this.catch = function (onRejected) {
+        if (_this.s == 'pending') {
+            setTimeout(_this.catch(onRejected), 1000);
+        } else if (onRejected && _this.s == 'rejected') {
+            onRejected(_this.rejectData);
+            return new Promise(_this.asyncFunc);
+        }
+    };
+    _this.asyncFunc(resolve, reject);
 };
