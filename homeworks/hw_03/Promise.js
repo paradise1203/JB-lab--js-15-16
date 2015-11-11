@@ -57,22 +57,29 @@ Promise = function(funcWithAnAsync) {
         _this.s = 'rejected';
     };
     _this.then = function (onResolved, onRejected) {
-        if (_this.s == 'pending') {
-            setTimeout(_this.then(onResolved, onRejected), 1000);
+        if (!_this.onResolved && !_this.onRejected) {
+            _this.onResolved = onResolved;
+            _this.onRejected = onRejected;
         }
-        else if (onRejected && _this.s == 'rejected') {
-            onRejected(_this.rejectData);
+        if (_this.s == 'pending') {
+            setTimeout(_this.then, 1000);
+        }
+        else if (_this.onRejected && _this.s == 'rejected') {
+            _this.onRejected(_this.rejectData);
             return new Promise(_this.asyncFunc);
         } else if (_this.s == 'fulfilled') {
-            onResolved(_this.resolveData);
+            _this.onResolved(_this.resolveData);
             return new Promise(_this.asyncFunc);
         }
     };
     _this.catch = function (onRejected) {
+        if (!_this.onRejected) {
+            _this.onRejected = onRejected;
+        }
         if (_this.s == 'pending') {
-            setTimeout(_this.catch(onRejected), 1000);
-        } else if (onRejected && _this.s == 'rejected') {
-            onRejected(_this.rejectData);
+            setTimeout(_this.catch, 1000);
+        } else if (_this.onRejected && _this.s == 'rejected') {
+            _this.onRejected(_this.rejectData);
             return new Promise(_this.asyncFunc);
         }
     };

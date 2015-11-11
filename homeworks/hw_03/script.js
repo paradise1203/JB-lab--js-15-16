@@ -9,22 +9,8 @@
 function isValidSelector(selector) {
     var regex;
     selector = " " + selector;
-    /*
-     selector = selector + " ";
-     regex = / [#\.a-z\d\[\]"=_-]+ /gim;
-     var elms = selector.match(regex);
-     var regex1 = /(#|\.)[a-z\d_-]+/gim;
-     var regex2 = /[a-z\d_-]+/gim;
-     var regex3 = /\[[a-z]+="[a-z\d_-]*"\]/gim;
-     for (var i in elms) {
-     var el = elms[i];
-     if (!(regex1.test(el) || regex2.test(el) || regex3.test(el))) {
-     return false;
-     }
-     }
-     */
-    regex = /( (((#|\.)[a-z\d_-]+)|([a-z\d_-]+)|(\[[a-z]+="\[(a-z\d_-)*]"])))+/gim;
-    return true;
+    regex = /( ((#|\.)?[a-z\d_-]+)|(\[[a-z]+="[a-z\d_-]*"\]))+/gim;
+    return regex.test(selector);
 }
 /**
  * -- test your might

@@ -67,7 +67,44 @@ Object.prototype.create = function(proto) {
  *
  * @return {Function} node
  */
-function node(name){
+function node(name) {
+    /*
+     if (this.name == undefined) {
+     this.childs = [];
+     this.parent = null;
+     this.name = name;
+     this.getName = function () {
+     return this.name;
+     };
+     this.getChild = function () {
+     return this.childs;
+     };
+     this.getPath = function () {
+     return '';
+     }
+     } else {
 
+    var node = function (name) {
+        node.getName = function () {
+            return name;
+        };
+    };
+    if (this.childs) {
+        this.childs.push(node);
+    }
+    node.parent = this;
+    node.childs = [];
+    node.getChild = function () {
+        return node.childs;
+    };
+    node.getPath = function () {
+        if (node == node.parent) {
+            return node.getName();
+        } else {
+            return node.parent.getPath() + "/" + node.getName();
+        }
+    };
+    return node;
+    */
 }
 
