@@ -9,7 +9,7 @@
 function isValidSelector(selector) {
     var regex;
     selector = " " + selector;
-    regex = /( ((#|\.)?[a-z\d_-]+)|(\[[a-z]+="[a-z\d_-]*"\]))+/gim;
+    regex = /^(\s((#|\.)?[a-z\d_\-]+)|(\[[a-z]+="[a-z\d_\-]*"\]))+$/gim;
     return regex.test(selector);
 }
 /**
